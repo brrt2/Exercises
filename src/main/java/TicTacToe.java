@@ -8,24 +8,36 @@ public class TicTacToe {
         checkAxis(x);
         checkAxis(y);
         lastPlayer = nextPlayer();
-        setBox(x,y,lastPlayer);
-        if(isWin()){
-            return "Wygral"+lastPlayer;
+        setBox(x, y, lastPlayer);
+        if (isWin(x, y)) {
+            return "Wygral " + lastPlayer ;
+        } else if (isDraw()) {
+            return "Wynik remisowy";
+        } else {
+            return "Brak zwyciezcy";
         }
-        return "Brak zwyciezcy";
     }
 
-    public boolean isWin(){
-        for(int i=0; i<SIZE; i++){
-            if(board[0][i]+
-                    board[1][i]+ board[1][i]==(lastPlayer*SIZE)){
-                return true;
-            }
-
+    private boolean isWin(int x, int y) {
+        int playerTotal = lastPlayer * SIZE;
+        char horizontal, vertical, diagonal1, diagonal2;
+        horizontal = vertical = diagonal1 = diagonal2 = '\0';
+        for (int i = 0; i < SIZE; i++) {
+            horizontal += board[i][y - 1];
+            vertical += board[x - 1][i];
+            diagonal1 += board[i][i];
+            diagonal2 += board[i][SIZE - i - 1];
+        }
+        if (horizontal == playerTotal
+                || vertical == playerTotal
+                || diagonal1 == playerTotal
+                || diagonal2 == playerTotal) {
+            return true;
         }
         return false;
     }
 
+    
     private void checkAxis(int liczba) {
         if (liczba < 1 || liczba > 3) {
             throw new RuntimeException("Podany argument nie miesci sie w planszy !");
@@ -45,6 +57,17 @@ public class TicTacToe {
             return '0';
         }
         return 'X';
+    }
+
+    private boolean isDraw() {
+        for (int x = 0; x < SIZE; x++) {
+            for (int y = 0; y < SIZE; y++) {
+                if (board[x][y] == '\0') {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }
